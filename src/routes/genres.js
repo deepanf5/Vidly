@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 
-const Genres = mongoose.Schema('Genres', new mongoose.model({
+const Genres = mongoose.model('Genres', new mongoose.Schema({
     name:{
         type:String,
         required:true,
@@ -15,11 +15,13 @@ const Genres = mongoose.Schema('Genres', new mongoose.model({
 
 router.post('/',async (req,res) => {
 
-    const genre = new Genres({
+    let genre = new Genres({
         name:req.body.name
     })
    genre = await genre.save()
    res.send(genre)
 })
 
+
+module.exports = router
 
