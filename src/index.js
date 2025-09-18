@@ -1,3 +1,4 @@
+const movies = require('./routes/movies')
 const customer = require('./routes/customer')
 const genres = require('./routes/genres');
 
@@ -9,6 +10,7 @@ const port = 4500
 app.use(express.json());
 app.use('/api/genres', genres);
 app.use('/api/customers',customer)
+app.use('/api/movies',movies)
 
 
 
