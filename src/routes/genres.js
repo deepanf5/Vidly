@@ -4,15 +4,17 @@ const express = require('express')
 const router = express.Router()
 
 
-
-const Genres = mongoose.model('Genres', new mongoose.Schema({
+const GenreSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         minlength: 5,
         maxlength: 50
     }
-}))
+})
+
+
+const Genres = mongoose.model('Genres', GenreSchema)
 
 
 
@@ -71,5 +73,5 @@ function ValidateGenre(genre) {
      return schema.validate(genre);
 }
 
-module.exports = router
+module.exports = {router,GenreSchema,Genres}
 
