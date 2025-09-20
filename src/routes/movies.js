@@ -118,4 +118,4 @@ function validateMovie(movie) {
 
 
 
-module.exports = router
+module.exports = {router,Movie}

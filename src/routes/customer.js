@@ -82,5 +82,5 @@ function validateCustomer(customer) {
 
 
 
-module.exports = router
+module.exports = {router,Customer}
 
