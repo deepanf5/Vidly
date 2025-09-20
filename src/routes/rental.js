@@ -66,7 +66,7 @@ const Rental = mongoose.model('rentals', new mongoose.Schema({
 
 
 router.get('/', async (req, res) => {
-    const rentals = await Rental.find('-dateOut')
+    const rentals = await Rental.find().sort('-dateOut')
     res.send(rentals)
 })
 
