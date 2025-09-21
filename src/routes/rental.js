@@ -2,6 +2,7 @@ const { Customer } = require('./customer')
 const { Movie } = require('./movies')
 
 const joi = require('joi')
+joi.objectId = require('joi-objectid')(joi)
 const mongoose = require('mongoose')
 const express = require('express')
 const router = express.Router()
@@ -71,64 +72,64 @@ router.get('/', async (req, res) => {
 })
 
 
-router.post('/', async (req, res) => {
+    router.post('/', async (req, res) => {
 
-    const { error } = validateRental(req.body)
-    if (error) return res.status(400).send(error.details[0].message)
+        const { error } = validateRental(req.body)
+        if (error) return res.status(400).send(error.details[0].message)
 
-    const session = await mongoose.startSession();
-    session.startTransaction()
+        const session = await mongoose.startSession();
+        session.startTransaction()
 
-    try {
-        const customer = await Customer.findById(req.body.customerId)
-        if (!customer) return res.status(400).send("Rquest Id with Customer is found")
+        try {
+            const customer = await Customer.findById(req.body.customerId)
+            if (!customer) return res.status(400).send("Rquest Id with Customer is found")
 
-        const movie = await Movie.findById(req.body.movieID)
-        if (!movie) return res.status(400).send("Rquest Id with Movie is found")
+            const movie = await Movie.findById(req.body.movieID)
+            if (!movie) return res.status(400).send("Rquest Id with Movie is found")
 
-        if (movie.numberInStock === 0) return res.status(404).send('Movie not in the stock')
-       
-        let rental = new Rental({
-            customer: {
-                _id: customer._id,
-                name: customer.name,
-                phone: customer.phone,
-                isGold:customer.isGold
-            },
-            movie: {
-                _id: movie._id,
-                title: movie.title,
-                dailyRentalRate: movie.dailyRentalRate,
-                numberInStock:movie.numberInStock
+            if (movie.numberInStock === 0) return res.status(404).send('Movie not in the stock')
+        
+            let rental = new Rental({
+                customer: {
+                    _id: customer._id,
+                    name: customer.name,
+                    phone: customer.phone,
+                    isGold:customer.isGold
+                },
+                movie: {
+                    _id: movie._id,
+                    title: movie.title,
+                    dailyRentalRate: movie.dailyRentalRate,
+                    numberInStock:movie.numberInStock
 
-            }
-        })
-        await rental.save({session})
-        movie.numberInStock--;
-        await movie.save({session})
+                }
+            })
+            await rental.save({session})
+            movie.numberInStock--;
+            await movie.save({session})
 
-        await session.commitTransaction()
-        session.endSession()
-        res.send(rental)
+            await session.commitTransaction()
+            session.endSession()
+            res.send(rental)
 
 
-    }
-    catch (err) {
-          await session.abortTransaction();
-        session.endSession();
-        console.error("Transaction error:", err);
-        res.status(500).send("Transaction failed.");
+        }
+        catch (err) {
+            await session.abortTransaction();
+            session.endSession();
+            console.error("Transaction error:", err);
+            res.status(500).send("Transaction failed.");
 
-    }
-})
+        }
+    })
 
 
 
 
 function validateRental(rental) {
     const schema = joi.object({
-        customerId: joi.string().required(),
-        movieID: joi.string().required(),
+        customerId: joi.objectId().required(),
+        movieID: joi.objectId().required(),
     })
 
     return schema.validate(rental)

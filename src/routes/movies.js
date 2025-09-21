@@ -54,8 +54,7 @@ router.get('/:id',async (req,res) => {
 router.post('/', async (req, res) => {
   const { error } = validateMovie(req.body)
   if(error) return res.status(400).send(error.details[0].message)
-  
-   const genre = await Genres.findById(req.body.genreId) 
+  const genre = await Genres.findById(req.body.genreId) 
    if(!genre) res.status(404).send("The requested Genre is not found")
   const movie = new Movie({
     title: req.body.title,
