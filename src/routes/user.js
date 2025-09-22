@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const joi = require('joi')
 const mongoose = require('mongoose')
 const express = require('express')
@@ -41,18 +42,14 @@ router.post('/', async(req,res) => {
 
     if(error) return res.status(400).send(error.details[0].message)
 
-    let user = User.findOne({email:req.body.email})
+    let user = await User.findOne({email:req.body.email})
 
     if(user) res.status(400).send("User Already registered")
 
 
-       user = new User({
-        name:req.body.name,
-        email:req.body.email,
-        password:req.body.password
-      }) 
+       user = new User(_.pick(req.body,['name','email','password'])) 
       await user.save()
-      res.send(user)
+      res.send(_.pick(user,['name','email']))
 })
 
 
