@@ -1,5 +1,7 @@
 const joi = require('joi')
 joi.objectId = require('joi-objectid')(joi)
+
+const user = require('./routes/user')
 const rentals = require('./routes/rental')
 const movies = require('./routes/movies')
 const customer = require('./routes/customer')
@@ -15,6 +17,7 @@ app.use('/api/genres', genres.router);
 app.use('/api/customers',customer.router);
 app.use('/api/movies',movies.router);
 app.use('/api/rentals',rentals)
+app.use('/api/users',user)
 
 
 
