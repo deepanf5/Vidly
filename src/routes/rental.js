@@ -1,15 +1,19 @@
-const { Customer } = require('./customer')
-const { Movie } = require('./movies')
+import { Customer } from './customer.js';
+import { Movie } from './movies.js';
 
-const joi = require('joi')
-joi.objectId = require('joi-objectid')(joi)
-const mongoose = require('mongoose')
-const express = require('express')
-const router = express.Router()
+import Joi from 'joi';
+import joiObjectId from 'joi-objectid';
+Joi.objectId = joiObjectId(Joi);
+
+import mongoose from 'mongoose';
+import express from 'express';
+
+const router = express.Router();
 
 
 
-const Rental = mongoose.model('rentals', new mongoose.Schema({
+
+export const Rental = mongoose.model('rentals', new mongoose.Schema({
 
     customer: new mongoose.Schema({
 
@@ -127,15 +131,15 @@ router.get('/', async (req, res) => {
 
 
 function validateRental(rental) {
-    const schema = joi.object({
-        customerId: joi.objectId().required(),
-        movieID: joi.objectId().required(),
+    const schema = Joi.object({
+        customerId: Joi.objectId().required(),
+        movieID: Joi.objectId().required(),
     })
 
     return schema.validate(rental)
 }
 
-module.exports = router
 
+export  default  router
 
 

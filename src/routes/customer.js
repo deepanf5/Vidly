@@ -1,10 +1,12 @@
-const joi = require('joi')
-const mongoose = require('mongoose')
-const express = require('express');
-const router = express.Router()
+import Joi from 'joi';
+import mongoose from 'mongoose';
+import express from 'express';
+
+const router = express.Router();
 
 
-const Customer = mongoose.model('Customers', new mongoose.Schema({
+
+export const Customer = mongoose.model('Customers', new mongoose.Schema({
     name: {
         type: String,
         minlength: 3,
@@ -72,15 +74,13 @@ router.put('/:id',async(req,res) => {
 
 
 function validateCustomer(customer) {
-    const schema = joi.object({
-        name: joi.string().min(3).max(50).required(),
-        isGold: joi.boolean().required(),
-        phone: joi.string().min(3).max(50).required(),
+    const schema = Joi.object({
+        name: Joi.string().min(3).max(50).required(),
+        isGold: Joi.boolean().required(),
+        phone: Joi.string().min(3).max(50).required(),
     })
     return schema.validate(customer)
 }
 
-
-
-module.exports = {router,Customer}
+export  default  router
 

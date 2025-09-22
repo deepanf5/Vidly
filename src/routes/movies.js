@@ -1,14 +1,15 @@
-const { GenreSchema, Genres }  = require('./genres')
+import { GenreSchema, Genres } from './genres.js';
 
-const joi = require('joi');
-const mongoose = require('mongoose')
-const express = require('express')
-const router = express.Router()
+import Joi from 'joi';
+import mongoose from 'mongoose';
+import express from 'express';
+
+const router = express.Router();
 
 
 
 // Define Movie schema
-const movieSchema = new mongoose.Schema({
+export const movieSchema = new mongoose.Schema({
   title: {
     type: String,
     minlength: 3,
@@ -33,7 +34,7 @@ const movieSchema = new mongoose.Schema({
 });
 
 // Create Movie model
-const Movie = mongoose.model('Movie', movieSchema);
+export const Movie = mongoose.model('Movie', movieSchema);
 
 // GET all movies
 router.get('/', async (req, res) => {
@@ -105,16 +106,15 @@ router.delete('/:id',async (req,res) => {
 
 function validateMovie(movie) {
 
-  const schema = joi.object({
-    title:joi.string().min(3).required(),
-    genreId: joi.string().required(), 
-    numberInStock: joi.number().min(0).required(), 
-    dailyRentalRate: joi.number().min(0).required() 
+  const schema = Joi.object({
+    title:Joi.string().min(3).required(),
+    genreId: Joi.string().required(), 
+    numberInStock: Joi.number().min(0).required(), 
+    dailyRentalRate: Joi.number().min(0).required() 
   })
 
   return schema.validate(movie)
 }
 
 
-
-module.exports = {router,Movie}
+export  default  router

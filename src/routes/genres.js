@@ -1,10 +1,12 @@
-const Joi = require('joi')
-const mongoose = require('mongoose')
-const express = require('express')
-const router = express.Router()
+import Joi from 'joi';
+import mongoose from 'mongoose';
+import express from 'express';
+
+const router = express.Router();
 
 
-const GenreSchema = new mongoose.Schema({
+
+export const GenreSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -14,7 +16,7 @@ const GenreSchema = new mongoose.Schema({
 })
 
 
-const Genres = mongoose.model('Genres', GenreSchema)
+export const Genres = mongoose.model('Genres', GenreSchema)
 
 
 
@@ -73,5 +75,4 @@ function ValidateGenre(genre) {
      return schema.validate(genre);
 }
 
-module.exports = {router,GenreSchema,Genres}
-
+export  default  router

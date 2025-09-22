@@ -1,24 +1,27 @@
-const joi = require('joi')
-joi.objectId = require('joi-objectid')(joi)
+import express from 'express';
+import mongoose from 'mongoose';
+import Joi from 'joi';
+import joiObjectId from 'joi-objectid';
 
-const auth = require('./routes/auth')
-const user = require('./routes/user')
-const rentals = require('./routes/rental')
-const movies = require('./routes/movies')
-const customer = require('./routes/customer')
-const genres = require('./routes/genres');
+import auth from './routes/auth.js';
+import user from './routes/user.js';
+import rentals from './routes/rental.js';
+import movies from './routes/movies.js';
+import customer from './routes/customer.js';
+import genres from './routes/genres.js';
 
-const mongoose = require('mongoose')
-const express = require('express')
+// Extend Joi with objectId
+Joi.objectId = joiObjectId(Joi);
+
 const app = express()
 const port = 4500
 
 app.use(express.json());
-app.use('/api/genres', genres.router);
-app.use('/api/customers',customer.router);
-app.use('/api/movies',movies.router);
+app.use('/api/genres', genres);
+app.use('/api/customers',customer);
+app.use('/api/movies',movies);
 app.use('/api/rentals',rentals)
-app.use('/api/users',user.router)
+app.use('/api/users',user)
 app.use('/api/auth',auth)
 
 
