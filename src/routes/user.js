@@ -68,4 +68,4 @@ function validateUser(user) {
 }
 
 
-module.exports = router 
+module.exports = {router, User}
