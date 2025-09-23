@@ -27,7 +27,8 @@ router.post('/', async (req, res) => {
     if (!user) res.status(400).send("Invalid email or Password")
         
         const validPassword = await bcrypt.compare(req.body.password, user.password)
-        if (!validPassword) res.status(400).send("Invalid email or Password")
+        if (!validPassword) return res.status(400).send("Invalid email or Password")
+            
      const tocken = await new SignJWT({_id:user._id})
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
