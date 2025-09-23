@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+import config from 'config'
 import { SignJWT } from 'jose'; // Correct way to import SignJWT in ESM
 import bcrypt from 'bcrypt';
 import _ from 'lodash';
@@ -33,7 +36,7 @@ router.post('/', async (req, res) => {
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('2h')  
-    .sign(new TextEncoder().encode('VidltSecertKey')) 
+    .sign(new TextEncoder().encode(config.get('jwtPrivateKey'))) 
     res.send(token)
 })
 
