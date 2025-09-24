@@ -1,13 +1,14 @@
 import { jwtVerify } from 'jose';
+import dotenv from 'dotenv';
 dotenv.config();
 import config from 'config'
 
-function auth(req, res, next) {
+export  default function auth(req, res, next) {
     const token = req.header('x-auth-token');
-    if (token) return res.status(401).send('Acess denied. No token provided')
+    if (!token) return res.status(401).send('Acess denied. No token provided')
 
     try {
-        const decode = jwtVerify(token, config.get('jwtPrivateKey'))
+        const {decode} = jwtVerify(token, config.get('jwtPrivateKey'))
         req.user = decode
         next()
     }
@@ -15,5 +16,3 @@ function auth(req, res, next) {
         res.status(400).send('Invalid token')
     }
 }
-
-export default auth

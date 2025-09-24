@@ -1,3 +1,4 @@
+import auth from '../middleware/auth.js';
 import Joi from 'joi';
 import mongoose from 'mongoose';
 import express from 'express';
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
     res.send(genres);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 
     const { error } = ValidateGenre(req.body)
     if (error) return res.status(400).send(error.details[0].message)
