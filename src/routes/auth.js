@@ -1,12 +1,10 @@
 import dotenv from 'dotenv';
-dotenv.config();
-import config from 'config'
-import { SignJWT } from 'jose'; // Correct way to import SignJWT in ESM
+dotenv.config()
 import bcrypt from 'bcrypt';
 import _ from 'lodash';
 import Joi from 'joi';
 
-import { User } from './user.js'; // Ensure user.js uses ESM exports
+import { User } from './user.js';
 
 import express from 'express';
 
