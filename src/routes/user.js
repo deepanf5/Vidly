@@ -11,10 +11,7 @@ import express from 'express';
 
 const router = express.Router();
 
-
-
-
-export const User = mongoose.model('Users',new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     
     name:{
         type:String,
@@ -35,7 +32,18 @@ export const User = mongoose.model('Users',new mongoose.Schema({
         maxlength:1024,
         required:true
     }
-}))
+})
+
+
+userSchema.methods.generateAuthToken = async function() {
+         const token = await new SignJWT({_id:this._id})
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime('2h')  
+        .sign(new TextEncoder().encode(config.get('jwtPrivateKey'))) 
+       return token 
+}
+export const User = mongoose.model('Users',userSchema)
 
 
 
@@ -59,11 +67,7 @@ router.post('/', async(req,res) => {
             const salt = await bcrypt.genSalt(10) 
             user.password = await bcrypt.hash(user.password,salt)
             await user.save()
-               const token = await new SignJWT({_id:user._id})
-                .setProtectedHeader({ alg: 'HS256' })
-                .setIssuedAt()
-                .setExpirationTime('2h')  
-                .sign(new TextEncoder().encode(config.get('jwtPrivateKey'))) 
+            const token = await user.generateAuthToken()
             res.header('x-auth-token',token).send(_.pick(user,['name','email']))
         })
         

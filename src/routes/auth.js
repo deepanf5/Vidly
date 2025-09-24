@@ -32,11 +32,7 @@ router.post('/', async (req, res) => {
         const validPassword = await bcrypt.compare(req.body.password, user.password)
         if (!validPassword) return res.status(400).send("Invalid email or Password")
 
-     const token = await new SignJWT({_id:user._id})
-    .setProtectedHeader({ alg: 'HS256' })
-    .setIssuedAt()
-    .setExpirationTime('2h')  
-    .sign(new TextEncoder().encode(config.get('jwtPrivateKey'))) 
+     const token = await user.generateAuthToken()       
     res.send(token)
 })
 
