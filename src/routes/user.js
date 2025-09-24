@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+dotenv.config();
+import config from 'config'
+import { SignJWT } from 'jose'; 
 import bcrypt from 'bcrypt';
 import _ from 'lodash';
 import Joi from 'joi';
@@ -49,13 +53,18 @@ router.post('/', async(req,res) => {
         
         let user = await User.findOne({email:req.body.email})
         
-        if(user) res.status(400).send("User Already registered")
+        if(user) return res.status(400).send("User Already registered")
             
             user = new User(_.pick(req.body,['name','email','password']))
             const salt = await bcrypt.genSalt(10) 
             user.password = await bcrypt.hash(user.password,salt)
             await user.save()
-            res.send(_.pick(user,['name','email']))
+               const token = await new SignJWT({_id:user._id})
+                .setProtectedHeader({ alg: 'HS256' })
+                .setIssuedAt()
+                .setExpirationTime('2h')  
+                .sign(new TextEncoder().encode(config.get('jwtPrivateKey'))) 
+            res.header('x-auth-token',token).send(_.pick(user,['name','email']))
         })
         
         
