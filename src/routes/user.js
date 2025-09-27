@@ -1,3 +1,4 @@
+import auth from '../middleware/auth.js'
 import dotenv from 'dotenv';
 dotenv.config();
 import config from 'config'
@@ -45,6 +46,32 @@ userSchema.methods.generateAuthToken = async function() {
 }
 export const User = mongoose.model('Users',userSchema)
 
+
+
+router.get('/me', auth, async (req, res) => {
+  try {
+    let userId;
+    if (typeof req.user._id === 'object' && req.user._id.buffer) {
+      const rawBuffer = Buffer.from(Object.values(req.user._id.buffer));
+      userId = new mongoose.Types.ObjectId(rawBuffer).toHexString();
+    } 
+    else {
+      userId = req.user._id.toString();
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).send('Invalid user ID');
+    }
+
+    const user = await User.findById(userId).select('-password');
+    if (!user) return res.status(404).send('User not found');
+
+    res.send(user);
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    res.status(500).send('Server error');
+  }
+});
 
 
 router.get('/', async (req,res) => {
