@@ -20,8 +20,13 @@ import logger from './middleware/logger.js';
 
 
 process.on('uncaughtException',(ex) => {
-    console.log(ex)
     logger.error(ex.message,ex)
+    process.exit(1)
+})
+
+process.on('unhandledRejection',(ex) => {
+    logger.error(ex.message,ex)
+    
 })
 
 
@@ -49,16 +54,13 @@ app.use(error)
 
 
 
-
-
-
-
 app.get('/',(req,res) => {
     if(req.url === '/') {
         res.send("Hello Express");
         res.end()
     }
 })
+
 
 
 app.listen(port,() => {
