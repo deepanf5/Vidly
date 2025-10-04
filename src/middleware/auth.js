@@ -5,13 +5,6 @@ import config from 'config'
 
 export  default async function auth(req, res, next) {
 
-      const validationOptions = {
-    algorithms: ['HS256'],
-};
-   
-
-
-
     const token = req.header('x-auth-token');
     if (!token) return res.status(401).send('Acess denied. No token provided')
 

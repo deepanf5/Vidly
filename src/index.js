@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import Joi from 'joi';
 import joiObjectId from 'joi-objectid';
 
+import error from './middleware/error.js'
 import auth from './routes/auth.js';
 import user from './routes/user.js';
 import rentals from './routes/rental.js';
@@ -35,6 +36,8 @@ app.use('/api/movies',movies);
 app.use('/api/rentals',rentals)
 app.use('/api/users',user)
 app.use('/api/auth',auth)
+
+app.use(error)
 
 
 
