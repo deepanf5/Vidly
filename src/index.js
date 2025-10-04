@@ -17,6 +17,7 @@ import genres from './routes/genres.js';
 
 
 
+
 // Extend Joi with objectId
 Joi.objectId = joiObjectId(Joi);
 

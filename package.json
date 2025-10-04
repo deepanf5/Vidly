@@ -19,6 +19,7 @@
     "joi-objectid": "^4.0.2",
     "jose": "^6.1.0",
     "lodash": "^4.17.21",
-    "mongoose": "^8.18.1"
+    "mongoose": "^8.18.1",
+    "winston": "^3.18.3"
   }
 }
