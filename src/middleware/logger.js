@@ -1,4 +1,5 @@
 import winston from 'winston';
+import 'winston-mongodb';
 
 
 const logger = winston.createLogger({
@@ -9,7 +10,13 @@ const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.File({ filename: 'logfile.log' }),
-    new winston.transports.Console() // optional: logs to console
+    new winston.transports.Console(), // optional: logs to console
+    new winston.transports.MongoDB({
+      db:"mongodb://127.0.0.1:27017/Vidly",
+      collection:"log",
+      level:'error',
+      options:{useUnifiedTopology:true}
+    })
   ],
 });
 
