@@ -24,8 +24,6 @@ export const Genres = mongoose.model('Genres', GenreSchema)
 
 
 router.get('/', asyncmiddleWare(async (req, res, next) => {
-
-    throw new Error('not accessible ')
     const genres = await Genres.find().sort('name')
     res.send(genres);
 }));
