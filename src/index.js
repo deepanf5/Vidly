@@ -13,9 +13,16 @@ import rentals from './routes/rental.js';
 import movies from './routes/movies.js';
 import customer from './routes/customer.js';
 import genres from './routes/genres.js';
+import logger from './middleware/logger.js';
 
 
 
+
+
+process.on('uncaughtException',(ex) => {
+    console.log(ex)
+    logger.error(ex.message,ex)
+})
 
 
 // Extend Joi with objectId
@@ -39,6 +46,7 @@ app.use('/api/users',user)
 app.use('/api/auth',auth)
 
 app.use(error)
+
 
 
 
